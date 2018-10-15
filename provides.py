@@ -19,11 +19,11 @@ from charms.reactive import scopes
 class MongoDBClient(RelationBase):
     scope = scopes.UNIT
 
-    @hook('{requires:mongodb}-relation-joined')
+    @hook('{provides:mongodb}-relation-joined')
     def joined(self):
         self.set_state('{relation_name}.connected')
 
-    @hook('{requires:mongodb}-relation-changed')
+    @hook('{provides:mongodb}-relation-changed')
     def changed(self):
         if self.connection_strings():
             self.set_state('{relation_name}.database.available')
@@ -31,11 +31,11 @@ class MongoDBClient(RelationBase):
         else:
             self.set_state('{relation_name}.removed')
 
-    @hook('{requires:mongodb}-relation-{broken,departed}')
+    @hook('{provides:mongodb}-relation-{broken,departed}')
     def broken_departed(self):
         self.remove_state('{relation_name}.connected')
 
-    @hook('{requires:mongodb}-relation-broken')
+    @hook('{provides:mongodb}-relation-broken')
     def broken(self):
         self.set_state('{relation_name}.removed')
 
