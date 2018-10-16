@@ -15,6 +15,9 @@ from charms.reactive import RelationBase
 from charms.reactive import hook
 from charms.reactive import scopes
 
+from charmhelpers.core.hookenv import (
+    log,
+)
 
 class MongoDBProvides(RelationBase):
     scope = scopes.UNIT
@@ -25,6 +28,7 @@ class MongoDBProvides(RelationBase):
 
     @hook('{provides:mongodb}-relation-changed')
     def changed(self):
+        log('#### setting state {relation_name}.available')
         self.set_state('{relation_name}.database.available')
         self.set_state('{relation_name}.available')
 
@@ -37,6 +41,7 @@ class MongoDBProvides(RelationBase):
         self.set_state('{relation_name}.removed')
 
     def send_connection(self, port, host=None):
+        log('#### sending connection data to remote')
         conv = self.conversation()
         conv.set_remote('port', port)
         conv.set_remote('host', host)

@@ -26,16 +26,17 @@ class MongoDBRequires(RelationBase):
 
     @hook('{requires:mongodb}-relation-changed')
     def changed(self):
+
         conv = self.conversation()
         if self.mongodbs():
-            conv.set_state('{relation_name}.ready')
+            conv.set_state('{relation_name}.available')
         else:
-            conv.remove_state('{relation_name}.ready')
+            conv.remove_state('{relation_name}.available')
 
     @hook('{requires:mongodb}-relation-departed')
     def departed(self):
         conv = self.conversation()
-        conv.remove_state('{relation_name}.ready')
+        conv.remove_state('{relation_name}.available')
         conv.remove_state('{relation_name}.joined')
 
     def mongodbs(self):
