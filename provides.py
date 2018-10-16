@@ -25,11 +25,8 @@ class MongoDBClient(RelationBase):
 
     @hook('{provides:mongodb}-relation-changed')
     def changed(self):
-        if self.connection_strings():
-            self.set_state('{relation_name}.database.available')
-            self.set_state('{relation_name}.available')
-        else:
-            self.set_state('{relation_name}.removed')
+        self.set_state('{relation_name}.database.available')
+        self.set_state('{relation_name}.available')
 
     @hook('{provides:mongodb}-relation-{broken,departed}')
     def broken_departed(self):
@@ -39,16 +36,21 @@ class MongoDBClient(RelationBase):
     def broken(self):
         self.set_state('{relation_name}.removed')
 
-    def connection_strings(self):
-        """
-        Get the connection strings for each conversation if available, or [].
-        """
-        connection_strings = []
-        for conv in self.conversations():
-            data = {
-                'hostname': conv.get_remote('hostname'),
-                'port': conv.get_remote('port'),
-            }
-            if all(data.values()):
-                connection_strings.append(str.format('{hostname}:{port}', **data))
-        return connection_strings
+    def send_connection(self, port, host=None):
+        conv = self.conversation()
+        conv.set_remote('port', port)
+        conv.set_remote('host', host)
+
+    # def connection_strings(self):
+    #     """
+    #     Get the connection strings for each conversation if available, or [].
+    #     """
+    #     connection_strings = []
+    #     for conv in self.conversations():
+    #         data = {
+    #             'hostname': conv.get_remote('hostname'),
+    #             'port': conv.get_remote('port'),
+    #         }
+    #         if all(data.values()):
+    #             connection_strings.append(str.format('{hostname}:{port}', **data))
+    #     return connection_strings
