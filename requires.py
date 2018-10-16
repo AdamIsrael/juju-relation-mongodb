@@ -27,7 +27,7 @@ class MongoDBRequires(RelationBase):
     @hook('{requires:mongodb}-relation-changed')
     def changed(self):
         conv = self.conversation()
-        if self.kafkas() and self.zookeepers():
+        if self.mongodbs():
             conv.set_state('{relation_name}.ready')
         else:
             conv.remove_state('{relation_name}.ready')
