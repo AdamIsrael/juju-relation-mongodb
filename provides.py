@@ -19,8 +19,9 @@ from charmhelpers.core.hookenv import (
     log,
 )
 
+
 class MongoDBProvides(RelationBase):
-    scope = scopes.UNIT
+    scope = scopes.GLOBAL
 
     @hook('{provides:mongodb}-relation-joined')
     def joined(self):

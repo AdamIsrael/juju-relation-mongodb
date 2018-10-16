@@ -30,7 +30,6 @@ class MongoDBRequires(RelationBase):
 
     @hook('{requires:mongodb}-relation-changed')
     def changed(self):
-
         conv = self.conversation()
         if self.mongodbs():
             log('#### setting relation available')
@@ -49,6 +48,7 @@ class MongoDBRequires(RelationBase):
         mongodbs = []
         log(self.conversations())
         for conv in self.conversations():
+            log(conv)
             port = conv.get_remote('port')
             host = conv.get_remote('host') or conv.get_remote(
                 'private-address')
