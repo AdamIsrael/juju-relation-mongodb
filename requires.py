@@ -15,6 +15,10 @@ from charms.reactive import RelationBase
 from charms.reactive import hook
 from charms.reactive import scopes
 
+from charmhelpers.core.hookenv import (
+    log,
+)
+
 
 class MongoDBRequires(RelationBase):
     scope = scopes.UNIT
@@ -29,8 +33,10 @@ class MongoDBRequires(RelationBase):
 
         conv = self.conversation()
         if self.mongodbs():
+            log('#### setting relation available')
             conv.set_state('{relation_name}.available')
         else:
+            log('#### removing relation available')
             conv.remove_state('{relation_name}.available')
 
     @hook('{requires:mongodb}-relation-departed')
@@ -41,11 +47,14 @@ class MongoDBRequires(RelationBase):
 
     def mongodbs(self):
         mongodbs = []
+        log(self.conversations())
         for conv in self.conversations():
             port = conv.get_remote('port')
             host = conv.get_remote('host') or conv.get_remote(
                 'private-address')
             if port:
+                log('#### appending mongodb {}:{}'.format(host, port))
+
                 mongodbs.append({
                     'host': host,
                     'port': port
