@@ -16,7 +16,7 @@ from charms.reactive import hook
 from charms.reactive import scopes
 
 
-class MongoDBClient(RelationBase):
+class MongoDBProvides(RelationBase):
     scope = scopes.UNIT
 
     @hook('{provides:mongodb}-relation-joined')
@@ -40,17 +40,3 @@ class MongoDBClient(RelationBase):
         conv = self.conversation()
         conv.set_remote('port', port)
         conv.set_remote('host', host)
-
-    # def connection_strings(self):
-    #     """
-    #     Get the connection strings for each conversation if available, or [].
-    #     """
-    #     connection_strings = []
-    #     for conv in self.conversations():
-    #         data = {
-    #             'hostname': conv.get_remote('hostname'),
-    #             'port': conv.get_remote('port'),
-    #         }
-    #         if all(data.values()):
-    #             connection_strings.append(str.format('{hostname}:{port}', **data))
-    #     return connection_strings
